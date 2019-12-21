@@ -5,16 +5,10 @@
 #define PIN_BUTTON 44
 #define PIN_SERVO 10
 
-struct Point {
-    int x;
-    int y;
-};
-
 int angle = 0;
 int servoDelay = 512;
 Button button(PIN_BUTTON);
 Servo servo;
-Point point;
 int cellToDrawNamber;
 bool buttunWasDown = false;
 
@@ -44,8 +38,7 @@ void loop() {
   {
     buttunWasDown = true;
     servoDelay = max(servoDelay - delayServoStep, 1);
-    point.y = servoDelay / boardSizeY;
-    drawRow();
+    drawRow(servoDelay / boardSizeY);
     delay(drawDelay);
   }
   if (button.isUp() && buttunWasDown)
@@ -72,14 +65,13 @@ void turnServo()
   }
 }
 
-void drawRow(){
+void drawRow(int y){
   for(int i=0; i<=8; i++){
-      point.x = i;
-      drawPoint(point);
+      drawPoint(i, y);
   }
 }
 
-void drawPoint(Point point)
+void drawPoint(int x, int y)
 {
-  ledDisplay.setLed(0, boardSizeY - 1 - point.y, point.x, true);
+  ledDisplay.setLed(0, boardSizeY - 1 - y, x, true);
 }
