@@ -32,7 +32,6 @@ const int drawDelay = 300;
 LedControl ledDisplay = LedControl(din, clk, cs, displayCount);
 
 void setup() {
-  Serial.begin(115200);
   servo.attach(PIN_SERVO);
   ledDisplay.shutdown(0, false);
   ledDisplay.setIntensity(0, 10);
@@ -52,7 +51,6 @@ void loop() {
     servoDelay = maxServoDelay;
     servo.write(0);
     ledDisplay.clearDisplay(0);
-    Serial.println(servoDelay);
   }
   else
   {
@@ -65,14 +63,6 @@ void loop() {
         point.x = i;
         drawPoint(point);
     }
-//    point.x = cellToDrawNamber % boardSizeX;
-//    point.y = cellToDrawNamber / boardSizeY;
-
-    Serial.println();
-    Serial.println(point.x);
-    Serial.println(point.y);
-    Serial.println();
-//    drawPoint(point);
     delay(drawDelay);
   }
 }
