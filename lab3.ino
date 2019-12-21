@@ -36,29 +36,32 @@ void setup() {
   servo.attach(PIN_SERVO);
   ledDisplay.shutdown(0, false);
   ledDisplay.setIntensity(0, 10);
-  ledDisplay.clearDisplay(0);
-  servo.write(0);
-  servoDelay = maxServoDelay;
+  setInitState();
 }
 
 void loop() {    
-    if (!button.isUp())
-    {
-      buttunWasDown = true;
-      servoDelay = max(servoDelay - delayServoStep, 1);
-      point.y = servoDelay / boardSizeY;
-      drawRow();
-      delay(drawDelay);
-    }
-    if (button.isUp() && buttunWasDown)
-    {
-      turnServo();
-      delay(300);
-      servoDelay = maxServoDelay;
-      servo.write(0);
-      ledDisplay.clearDisplay(0);
-      buttunWasDown = false;
-    }
+  if (!button.isUp())
+  {
+    buttunWasDown = true;
+    servoDelay = max(servoDelay - delayServoStep, 1);
+    point.y = servoDelay / boardSizeY;
+    drawRow();
+    delay(drawDelay);
+  }
+  if (button.isUp() && buttunWasDown)
+  {
+    turnServo();
+    delay(300);
+    setInitState();
+    buttunWasDown = false;
+  }
+}
+
+void setInitState()
+{
+  ledDisplay.clearDisplay(0);
+  servo.write(0);
+  servoDelay = maxServoDelay;
 }
 
 void turnServo()
