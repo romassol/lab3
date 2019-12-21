@@ -16,6 +16,7 @@ Button button(PIN_BUTTON);
 Servo servo;
 Point point;
 int cellToDrawNamber;
+bool buttunWasDown = false;
 
 
 const int din = 26;
@@ -37,32 +38,32 @@ void setup() {
   ledDisplay.setIntensity(0, 10);
   ledDisplay.clearDisplay(0);
   servo.write(0);
+  servoDelay = maxServoDelay;
 }
 
-void loop() {
-  if (button.wasUp())
-  {
-    turnServo();
-    delay(300);
-    angle = 0;
-    servoDelay = maxServoDelay;
-    servo.write(0);
-    ledDisplay.clearDisplay(0);
-  }
-  else
-  {
-    angle = maxAngle;
-    servoDelay = max(servoDelay - delayServoStep, 1);
-    cellToDrawNamber = ((maxServoDelay - servoDelay)/delayServoStep) - 1;
-    point.y = servoDelay / boardSizeY;
-    drawRow();
-    delay(drawDelay);
-  }
+void loop() {    
+    if (!button.isUp())
+    {
+      buttunWasDown = true;
+      servoDelay = max(servoDelay - delayServoStep, 1);
+      point.y = servoDelay / boardSizeY;
+      drawRow();
+      delay(drawDelay);
+    }
+    if (button.isUp() && buttunWasDown)
+    {
+      turnServo();
+      delay(300);
+      servoDelay = maxServoDelay;
+      servo.write(0);
+      ledDisplay.clearDisplay(0);
+      buttunWasDown = false;
+    }
 }
 
 void turnServo()
 {
-  for(int i=0; i<=angle; i++){
+  for(int i=0; i<=maxAngle; i++){
       servo.write(i);
       delay(servoDelay);
   }

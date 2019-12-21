@@ -14,7 +14,7 @@ public:
         pinMode(pin, INPUT_PULLUP);
     }
 
-    bool wasUp()
+    bool isUp()
     {
       return digitalRead(pin);
     }
